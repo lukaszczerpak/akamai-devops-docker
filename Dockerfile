@@ -56,9 +56,10 @@ RUN echo '                ___    __                         _            ' >  /r
     echo '=  This system is setup with all the tools you will need to   =' >> /root/.motd && \
     echo '=  complete the Akamai for DevOps training sessions.          =' >> /root/.motd && \
     echo '===============================================================' >> /root/.motd
-RUN echo "cat /root/.motd" >> /root/.bashrc 
-RUN echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc 
-RUN echo "[[ -f /root/.terraform-env ]] && source .terraform-env" >> /root/.bashrc
+RUN echo "cat /root/.motd" >> /root/.bashrc && \
+    echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc && \
+    echo "[[ -f /root/.terraform-env ]] && source .terraform-env" >> /root/.bashrc && \
+    echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" >> /root/.bashrc
 RUN mkdir /root/.httpie 
 RUN echo '{' >> /root/.httpie/config.json && \
     echo '"__meta__": {' >> /root/.httpie/config.json && \
