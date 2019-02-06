@@ -6,5 +6,11 @@ Environment setup for Akamai DevOps:
 - Terraform + Akamai provider
 - curl and httpie with EdgeGrid addons
 
+## How to use it
+
+```
+docker run -it lukaszczerpak/akamai-devops-labs
+```
+
 ## License
 [Apache License 2.0](LICENSE)

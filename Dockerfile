@@ -11,16 +11,17 @@ RUN cd $GOPATH/src/github.com/akamai && \
     make dep-install && \
     make build
 RUN pip install --upgrade pip && pip3 install --upgrade pip
-RUN curl -s https://developer.akamai.com/cli/package-list.json | jq .packages[].name | sed s/\"//g | xargs akamai install --force 
-RUN akamai install --force property-manager
+RUN curl -s https://developer.akamai.com/cli/package-list.json | jq '.packages[].name' | sed s/\"//g | xargs akamai install --force 
 RUN go get github.com/spf13/cast && akamai install cli-api-gateway 
+# https://github.com/akamai/cli-sandbox/issues/24
+RUN akamai install sandbox && cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-sandbox/ && npm run build
 WORKDIR /wheels
 RUN pip install wheel
 RUN pip wheel httpie httpie-edgegrid 
 
 FROM base
 ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go
-RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools 
+RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat
 
 COPY --from=builder /wheels /wheels
 RUN pip install --upgrade pip && \
@@ -37,12 +38,13 @@ COPY --from=builder /go/bin/terraform-provider-akamai /root/.terraform.d/plugins
 RUN echo 'eval "$(/usr/local/bin/akamai --bash)"' >> /root/.bashrc 
 RUN echo "[cli]" > /cli/.akamai-cli/config && \
     echo "cache-path            = /cli/.akamai-cli/cache" >> /cli/.akamai-cli/config && \
-    echo "config-version        = 1" >> /cli/.akamai-cli/config && \
+    echo "config-version        = 1.1" >> /cli/.akamai-cli/config && \
     echo "enable-cli-statistics = true" >> /cli/.akamai-cli/config && \
     echo "last-ping             = 2018-08-08T00:00:12Z" >> /cli/.akamai-cli/config && \
     echo "client-id             = devops-sandbox" >> /cli/.akamai-cli/config && \
     echo "install-in-path       =" >> /cli/.akamai-cli/config && \
-    echo "last-upgrade-check    = ignore" >> /cli/.akamai-cli/config
+    echo "last-upgrade-check    = ignore" >> /cli/.akamai-cli/config && \
+    echo "stats-version         = 1.1" >> /cli/.akamai-cli/config
 RUN echo '                ___    __                         _            ' >  /root/.motd && \
     echo '               /   |  / /______ _____ ___  ____ _(_)           ' >> /root/.motd && \
     echo '              / /| | / //_/ __ `/ __ `__ \/ __ `/ /            ' >> /root/.motd && \
