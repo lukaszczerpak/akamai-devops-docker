@@ -82,4 +82,4 @@ RUN mkdir /root/pipeline && ln -s /root/pipeline /pipeline
 
 VOLUME /root
 WORKDIR /root
-ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/bash"]
