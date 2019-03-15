@@ -45,18 +45,18 @@ RUN echo "[cli]" > /cli/.akamai-cli/config && \
     echo "install-in-path       =" >> /cli/.akamai-cli/config && \
     echo "last-upgrade-check    = ignore" >> /cli/.akamai-cli/config && \
     echo "stats-version         = 1.1" >> /cli/.akamai-cli/config
-RUN echo '                ___    __                         _            ' >  /root/.motd && \
-    echo '               /   |  / /______ _____ ___  ____ _(_)           ' >> /root/.motd && \
-    echo '              / /| | / //_/ __ `/ __ `__ \/ __ `/ /            ' >> /root/.motd && \
-    echo '             / ___ |/ ,< / /_/ / / / / / / /_/ / /             ' >> /root/.motd && \
-    echo '            /_/  |_/_/|_|\__,_/_/ /_/ /_/\__,_/_/              ' >> /root/.motd && \
-    echo '===============================================================' >> /root/.motd && \
-    echo '=  Welcome to the Akamai Shell for DevOps                     =' >> /root/.motd && \
-    echo '===============================================================' >> /root/.motd && \
-    echo '=  Project page:                                              =' >> /root/.motd && \
-    echo '=  https://github.com/lukaszczerpak/akamai-devops-docker      =' >> /root/.motd && \
-    echo '===============================================================' >> /root/.motd
-RUN echo "cat /root/.motd" >> /root/.bashrc && \
+RUN echo '                ___    __                         _            ' >  /etc/motd && \
+    echo '               /   |  / /______ _____ ___  ____ _(_)           ' >> /etc/motd && \
+    echo '              / /| | / //_/ __ `/ __ `__ \/ __ `/ /            ' >> /etc/motd && \
+    echo '             / ___ |/ ,< / /_/ / / / / / / /_/ / /             ' >> /etc/motd && \
+    echo '            /_/  |_/_/|_|\__,_/_/ /_/ /_/\__,_/_/              ' >> /etc/motd && \
+    echo '===============================================================' >> /etc/motd && \
+    echo '=  Welcome to the Akamai Shell for DevOps                     =' >> /etc/motd && \
+    echo '===============================================================' >> /etc/motd && \
+    echo '=  Project page:                                              =' >> /etc/motd && \
+    echo '=  https://github.com/lukaszczerpak/akamai-devops-docker      =' >> /etc/motd && \
+    echo '===============================================================' >> /etc/motd
+RUN echo "cat /etc/motd" >> /root/.bashrc && \
     echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc && \
     echo "[[ -f /root/.terraform-env ]] && source .terraform-env" >> /root/.bashrc && \
     echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" >> /root/.bashrc
