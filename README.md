@@ -57,3 +57,10 @@ Assuming you run a webserver locally on port 5000 and sandbox is exposed on port
 ## License
 [Apache License 2.0](LICENSE)
 
+## Build
+
+```bash
+docker build -t lukaszczerpak/akamai-devops-labs:YYYYmmddHH00 .
+docker tag lukaszczerpak/akamai-devops-labs:YYYYmmddHH00 lukaszczerpak/akamai-devops-labs:latest
+docker push lukaszczerpak/akamai-devops-labs
+```

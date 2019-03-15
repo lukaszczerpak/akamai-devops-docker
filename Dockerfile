@@ -53,8 +53,8 @@ RUN echo '                ___    __                         _            ' >  /r
     echo '===============================================================' >> /root/.motd && \
     echo '=  Welcome to the Akamai Shell for DevOps                     =' >> /root/.motd && \
     echo '===============================================================' >> /root/.motd && \
-    echo '=  This system is setup with all the tools you will need to   =' >> /root/.motd && \
-    echo '=  complete the Akamai for DevOps training sessions.          =' >> /root/.motd && \
+    echo '=  Project page:                                              =' >> /root/.motd && \
+    echo '=  https://github.com/lukaszczerpak/akamai-devops-docker      =' >> /root/.motd && \
     echo '===============================================================' >> /root/.motd
 RUN echo "cat /root/.motd" >> /root/.bashrc && \
     echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc && \
