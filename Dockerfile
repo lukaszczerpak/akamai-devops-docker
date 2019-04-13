@@ -21,7 +21,7 @@ RUN pip wheel httpie httpie-edgegrid
 
 FROM base
 ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go
-RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat
+RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat nss
 
 COPY --from=builder /wheels /wheels
 RUN pip install --upgrade pip && \
