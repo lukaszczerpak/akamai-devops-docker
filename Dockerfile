@@ -11,7 +11,7 @@ RUN cd $GOPATH/src/github.com/akamai && \
     make dep-install && \
     make build
 RUN pip install --upgrade pip && pip3 install --upgrade pip
-RUN curl -s https://developer.akamai.com/cli/package-list.json | jq '.packages[].name' | sed s/\"//g | xargs akamai install --force 
+RUN curl -s https://developer.akamai.com/cli/package-list.json -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:42.0) Gecko/20100101 Firefox/42.0" | jq '.packages[].name' | sed s/\"//g | xargs akamai install --force 
 RUN go get github.com/spf13/cast && akamai install cli-api-gateway 
 # https://github.com/akamai/cli-sandbox/issues/24
 RUN akamai install sandbox && cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-sandbox/ && npm run build
