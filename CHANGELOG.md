@@ -1,5 +1,8 @@
 # Changelog
 
+## 201908181000
+- [update] updated Terraform to 0.12.6 with Akamai provider builtin
+
 ## 201903151200
 - [new] added project page to the welcome message
 
