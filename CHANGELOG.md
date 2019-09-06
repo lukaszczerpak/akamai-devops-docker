@@ -1,5 +1,10 @@
 # Changelog
 
+## 201909061915
+
+- [fix] missing dependency for Akamai Sandbox (<https://github.com/lukaszczerpak/akamai-devops-docker/issues/1>)
+- [update] updated Terraform to 0.12.8
+
 ## 201908181000
 - [update] updated Terraform to 0.12.6 with Akamai provider builtin
 

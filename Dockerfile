@@ -16,7 +16,7 @@ RUN pip wheel httpie httpie-edgegrid
 
 FROM base
 ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go
-RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat nss
+RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat gcompat nss
 
 COPY --from=builder /wheels /wheels
 RUN pip install --upgrade pip && \
@@ -64,8 +64,8 @@ RUN echo '{' >> /root/.httpie/config.json && \
     echo '"implicit_content_type": "json"' >> /root/.httpie/config.json && \
     echo '}' >> /root/.httpie/config.json
 
-ENV TERRAFORM_VERSION=0.12.6 \
-    TERRAFORM_SHA256SUM=6544eb55b3e916affeea0a46fe785329c36de1ba1bdb51ca5239d3567101876f
+ENV TERRAFORM_VERSION=0.12.8 \
+    TERRAFORM_SHA256SUM=43806e68f7af396449dd4577c6e5cb63c6dc4a253ae233e1dddc46cf423d808b
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     echo "${TERRAFORM_SHA256SUM} *terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
     sha256sum -c terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
