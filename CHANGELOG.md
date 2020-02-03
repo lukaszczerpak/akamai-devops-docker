@@ -1,5 +1,12 @@
 # Changelog
 
+## 202002032000
+
+- [fix] fixed CLI wrapper build steps
+- [new] EdgeWorkers CLI
+- [update] updated Terraform to 0.12.20
+- [update] all CLIs updated to the latest versions
+
 ## 201909061915
 
 - [fix] missing dependency for Akamai Sandbox (<https://github.com/lukaszczerpak/akamai-devops-docker/issues/1>)

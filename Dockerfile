@@ -1,15 +1,16 @@
-FROM alpine as base
+FROM alpine:3.11 as base
 
 FROM base as builder
-ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go
+ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go GO111MODULE=auto PATH=$PATH:$GOBIN
 RUN mkdir -p /cli/.akamai-cli
 RUN apk add --no-cache docker git bash python2 python2-dev py2-pip python3 python3-dev npm wget jq openssl openssl-dev curl nodejs build-base libffi libffi-dev vim nano util-linux go dep tree bind-tools 
-RUN go get github.com/akamai/cli && cd $GOPATH/src/github.com/akamai/cli && dep ensure && go build -o /usr/local/bin/akamai
+RUN go get -d github.com/akamai/cli && cd $GOPATH/src/github.com/akamai/cli && go mod init && go mod tidy && go build -o /usr/local/bin/akamai
 RUN pip install --upgrade pip && pip3 install --upgrade pip
 RUN curl -s https://developer.akamai.com/cli/package-list.json -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:42.0) Gecko/20100101 Firefox/42.0" | jq '.packages[].name' | sed s/\"//g | xargs akamai install --force 
 RUN go get github.com/spf13/cast && akamai install cli-api-gateway 
 # https://github.com/akamai/cli-sandbox/issues/24
 RUN akamai install sandbox && cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-sandbox/ && npm run build
+RUN cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-edgeworkers/ && npm run build
 WORKDIR /wheels
 RUN pip install wheel
 RUN pip wheel httpie httpie-edgegrid 
@@ -64,8 +65,8 @@ RUN echo '{' >> /root/.httpie/config.json && \
     echo '"implicit_content_type": "json"' >> /root/.httpie/config.json && \
     echo '}' >> /root/.httpie/config.json
 
-ENV TERRAFORM_VERSION=0.12.8 \
-    TERRAFORM_SHA256SUM=43806e68f7af396449dd4577c6e5cb63c6dc4a253ae233e1dddc46cf423d808b
+ENV TERRAFORM_VERSION=0.12.20 \
+    TERRAFORM_SHA256SUM=46bd906f8cb9bbb871905ecb23ae7344af8017d214d735fbb6d6c8e0feb20ff3
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     echo "${TERRAFORM_SHA256SUM} *terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
     sha256sum -c terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
