@@ -1,5 +1,9 @@
 # Changelog
 
+## 202002041100
+
+- [new] AKAMAI_CLI_HOME is now configurable and defaults to "/cli"
+
 ## 202002032000
 
 - [fix] fixed CLI wrapper build steps

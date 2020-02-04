@@ -1,8 +1,9 @@
 FROM alpine:3.11 as base
 
 FROM base as builder
-ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go GO111MODULE=auto PATH=$PATH:$GOBIN
-RUN mkdir -p /cli/.akamai-cli
+ARG AKAMAI_CLI_HOME=/cli
+ENV AKAMAI_CLI_HOME=$AKAMAI_CLI_HOME GOROOT=/usr/lib/go GOPATH=/go GO111MODULE=auto PATH=$PATH:$GOBIN
+RUN mkdir -p $AKAMAI_CLI_HOME/.akamai-cli
 RUN apk add --no-cache docker git bash python2 python2-dev py2-pip python3 python3-dev npm wget jq openssl openssl-dev curl nodejs build-base libffi libffi-dev vim nano util-linux go dep tree bind-tools 
 RUN go get -d github.com/akamai/cli && cd $GOPATH/src/github.com/akamai/cli && go mod init && go mod tidy && go build -o /usr/local/bin/akamai
 RUN pip install --upgrade pip && pip3 install --upgrade pip
@@ -16,7 +17,8 @@ RUN pip install wheel
 RUN pip wheel httpie httpie-edgegrid 
 
 FROM base
-ENV AKAMAI_CLI_HOME=/cli GOROOT=/usr/lib/go GOPATH=/go
+ARG AKAMAI_CLI_HOME=/cli
+ENV AKAMAI_CLI_HOME=$AKAMAI_CLI_HOME GOROOT=/usr/lib/go GOPATH=/go GO111MODULE=auto PATH=$PATH:$GOBIN
 RUN apk add --no-cache docker git bash python2 py2-pip python3 npm wget jq openssl openssh-client curl nodejs libffi vim nano util-linux tree bind-tools openjdk8 libc6-compat gcompat nss
 
 COPY --from=builder /wheels /wheels
@@ -27,19 +29,19 @@ RUN pip install --upgrade pip && \
     rm -rf /wheels && \
     rm -rf /root/.cache/pip/*
 
-COPY --from=builder /cli /cli
+COPY --from=builder $AKAMAI_CLI_HOME $AKAMAI_CLI_HOME
 COPY --from=builder /usr/local/bin/akamai /usr/local/bin/akamai
 
 RUN echo 'eval "$(/usr/local/bin/akamai --bash)"' >> /root/.bashrc 
-RUN echo "[cli]" > /cli/.akamai-cli/config && \
-    echo "cache-path            = /cli/.akamai-cli/cache" >> /cli/.akamai-cli/config && \
-    echo "config-version        = 1.1" >> /cli/.akamai-cli/config && \
-    echo "enable-cli-statistics = true" >> /cli/.akamai-cli/config && \
-    echo "last-ping             = 2018-08-08T00:00:12Z" >> /cli/.akamai-cli/config && \
-    echo "client-id             = devops-sandbox" >> /cli/.akamai-cli/config && \
-    echo "install-in-path       =" >> /cli/.akamai-cli/config && \
-    echo "last-upgrade-check    = ignore" >> /cli/.akamai-cli/config && \
-    echo "stats-version         = 1.1" >> /cli/.akamai-cli/config
+RUN echo "[cli]" > $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "cache-path            = $AKAMAI_CLI_HOME/.akamai-cli/cache" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "config-version        = 1.1" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "enable-cli-statistics = true" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "last-ping             = 2018-08-08T00:00:12Z" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "client-id             = devops-sandbox" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "install-in-path       =" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "last-upgrade-check    = ignore" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
+    echo "stats-version         = 1.1" >> $AKAMAI_CLI_HOME/.akamai-cli/config
 RUN echo '                ___    __                         _            ' >  /etc/motd && \
     echo '               /   |  / /______ _____ ___  ____ _(_)           ' >> /etc/motd && \
     echo '              / /| | / //_/ __ `/ __ `__ \/ __ `/ /            ' >> /etc/motd && \
