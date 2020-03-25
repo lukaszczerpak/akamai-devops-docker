@@ -1,5 +1,10 @@
 # Changelog
 
+## 202003251200
+
+- [fix] `cffi` package throws an error about missing `gcc`
+- [improvement] ensure bash session always starts and all environment variables are properly initialized. This improves compatibility to use this image in scripts (more details in README.md).
+
 ## 202002041100
 
 - [new] AKAMAI_CLI_HOME is now configurable and defaults to "/cli"

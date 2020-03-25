@@ -14,7 +14,7 @@ RUN akamai install sandbox && cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-sandbox/ &
 RUN cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-edgeworkers/ && npm run build
 WORKDIR /wheels
 RUN pip install wheel
-RUN pip wheel httpie httpie-edgegrid 
+RUN pip wheel httpie httpie-edgegrid cffi
 
 FROM base
 ARG AKAMAI_CLI_HOME=/cli
@@ -25,14 +25,14 @@ COPY --from=builder /wheels /wheels
 RUN pip install --upgrade pip && \
     pip3 install --upgrade pip && \
     pip3 install netstorageapi && \
-    pip install -f /wheels httpie httpie-edgegrid && \
+    pip install -f /wheels cffi httpie httpie-edgegrid && \
     rm -rf /wheels && \
     rm -rf /root/.cache/pip/*
 
 COPY --from=builder $AKAMAI_CLI_HOME $AKAMAI_CLI_HOME
 COPY --from=builder /usr/local/bin/akamai /usr/local/bin/akamai
 
-RUN echo 'eval "$(/usr/local/bin/akamai --bash)"' >> /root/.bashrc 
+RUN echo 'eval "$(/usr/local/bin/akamai --bash)"' >> /root/.profile 
 RUN echo "[cli]" > $AKAMAI_CLI_HOME/.akamai-cli/config && \
     echo "cache-path            = $AKAMAI_CLI_HOME/.akamai-cli/cache" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
     echo "config-version        = 1.1" >> $AKAMAI_CLI_HOME/.akamai-cli/config && \
@@ -54,9 +54,9 @@ RUN echo '                ___    __                         _            ' >  /e
     echo '=  https://github.com/lukaszczerpak/akamai-devops-docker      =' >> /etc/motd && \
     echo '===============================================================' >> /etc/motd
 RUN echo "cat /etc/motd" >> /root/.bashrc && \
-    echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc && \
-    echo "[[ -f /root/.terraform-env ]] && source .terraform-env" >> /root/.bashrc && \
-    echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" >> /root/.bashrc
+    echo "PS1=\"\[\e[38;2;255;165;0m\]Akamai DevOps [\w] >>\[\e[m\] \"" >> /root/.bashrc
+RUN echo "[[ -f /root/.terraform-env ]] && source .terraform-env" >> /root/.profile && \
+    echo "export JAVA_HOME=/usr/lib/jvm/default-jvm" >> /root/.profile
 RUN mkdir /root/.httpie 
 RUN echo '{' >> /root/.httpie/config.json && \
     echo '"__meta__": {' >> /root/.httpie/config.json && \
@@ -79,4 +79,6 @@ RUN mkdir /root/pipeline && ln -s /root/pipeline /pipeline
 
 VOLUME /root
 WORKDIR /root
-CMD ["/bin/bash"]
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["bash"]
