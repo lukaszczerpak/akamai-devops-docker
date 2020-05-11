@@ -7,14 +7,15 @@ RUN mkdir -p $AKAMAI_CLI_HOME/.akamai-cli
 RUN apk add --no-cache docker git bash python2 python2-dev py2-pip python3 python3-dev npm wget jq openssl openssl-dev curl nodejs build-base libffi libffi-dev vim nano util-linux go dep tree bind-tools 
 RUN go get -d github.com/akamai/cli && cd $GOPATH/src/github.com/akamai/cli && go mod init && go mod tidy && go build -o /usr/local/bin/akamai
 RUN pip install --upgrade pip && pip3 install --upgrade pip
+RUN npm config set unsafe-perm true
 RUN curl -s https://developer.akamai.com/cli/package-list.json -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:42.0) Gecko/20100101 Firefox/42.0" | jq '.packages[].name' | sed s/\"//g | xargs akamai install --force 
 RUN go get github.com/spf13/cast && akamai install cli-api-gateway 
 # https://github.com/akamai/cli-sandbox/issues/24
-RUN akamai install sandbox && cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-sandbox/ && npm run build
 RUN cd $AKAMAI_CLI_HOME/.akamai-cli/src/cli-edgeworkers/ && npm run build
 WORKDIR /wheels
 RUN pip install wheel
 RUN pip wheel httpie httpie-edgegrid cffi
+RUN find $AKAMAI_CLI_HOME -name .git -type d | xargs rm -rf
 
 FROM base
 ARG AKAMAI_CLI_HOME=/cli

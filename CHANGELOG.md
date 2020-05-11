@@ -1,5 +1,10 @@
 # Changelog
 
+## 202005111200
+
+- [fix] Sandbox CLI doesn't require explicit build, it's now listed on the `package-list.json` endpoint
+- [improvement] removed `.git` folders to reduce image size
+
 ## 202003251200
 
 - [fix] `cffi` package throws an error about missing `gcc`
