@@ -1,5 +1,9 @@
 # Changelog
 
+## 202005121900
+
+- [improvement] docker image size reduction
+
 ## 202005111200
 
 - [fix] Sandbox CLI doesn't require explicit build, it's now listed on the `package-list.json` endpoint
