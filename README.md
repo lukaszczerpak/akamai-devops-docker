@@ -1,3 +1,9 @@
+### !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !!
+###
+### This repository is not maintained any more as its contents have been merged with https://github.com/akamai/akamai-docker (I am one of its main contributors)
+###
+### !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !! !!
+
 # Akamai DevOps Environment
 
 Environment setup for Akamai DevOps:
